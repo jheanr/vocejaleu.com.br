@@ -41,24 +41,25 @@ function DatabaseStatus() {
     refreshInterval: 5000,
   });
 
-  let databaseStatusInfo = {};
+  let databaseStatusInfo = "Carregando...";
 
   if (!isLoading && data) {
     const { database } = data.dependencies;
-    databaseStatusInfo = database;
+    databaseStatusInfo = (
+      <>
+        <p>Conexões disponíveis: {database.max_connections}</p>
+        <p>Conexões abertas: {database.opened_connections}</p>
+        <p>
+          Versão do PostgreSQL: <span class="badge">{database.version}</span>
+        </p>
+      </>
+    );
   }
-
-  console.log(data);
 
   return (
     <>
       <h2>Banco de dados</h2>
-      <p>Conexões disponíveis: {databaseStatusInfo.max_connections}</p>
-      <p>Conexões abertas: {databaseStatusInfo.opened_connections}</p>
-      <p>
-        Versão do PostgreSQL:{" "}
-        <span class="badge">{databaseStatusInfo.version}</span>
-      </p>
+      {databaseStatusInfo}
     </>
   );
 }
