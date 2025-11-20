@@ -2,9 +2,11 @@ import { createRouter } from "next-connect";
 import controller from "infra/controller.js";
 import user from "models/user.js";
 import activation from "models/activation";
+import features from "infra/constants/features";
 
 const router = createRouter();
-router.post(postHandler);
+router.use(controller.injectAnonymousOrUser);
+router.post(controller.canRequest(features.CREATE_USER), postHandler);
 
 export default router.handler(controller.errorHandlers);
 
