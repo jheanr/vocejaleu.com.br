@@ -2,14 +2,15 @@ import database from "infra/database.js";
 import email from "infra/email.js";
 import { NotFoundError } from "infra/errors.js";
 import webserver from "infra/webserver.js";
+import features from "infra/constants/features";
 import user from "models/user.js";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
 
 async function activateUserByUserId(userId) {
   const activatedUser = await user.setFeatures(userId, [
-    "create:session",
-    "read:session",
+    features.CREATE_SESSION,
+    features.READ_SESSION,
   ]);
   return activatedUser;
 }

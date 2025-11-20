@@ -10,6 +10,7 @@ import {
   UnauthorizedError,
   ForbiddenError,
 } from "infra/errors";
+import features from "infra/constants/features.js";
 
 function onNoMatchHandler(request, response) {
   const publicErrorObject = new MethodNotAllowedError();
@@ -82,7 +83,11 @@ async function injectAuthenticatedUser(request) {
 
 function injectAnonymousUser(request) {
   const anonymousUserObject = {
-    features: ["read:activation_token", "create:session", "create:user"],
+    features: [
+      features.READ_ACTIVATION_TOKEN,
+      features.CREATE_SESSION,
+      features.CREATE_USER,
+    ],
   };
 
   request.context = {

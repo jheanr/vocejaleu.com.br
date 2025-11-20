@@ -1,5 +1,6 @@
 import database from "infra/database.js";
 import { NotFoundError, ValidationError } from "infra/errors.js";
+import features from "infra/constants/features";
 import password from "models/password.js";
 
 async function create(userInputValues) {
@@ -32,7 +33,7 @@ async function create(userInputValues) {
   }
 
   function injectDefaultFeaturesInObject(userInputValues) {
-    userInputValues.features = ["read:activation_token"];
+    userInputValues.features = [features.READ_ACTIVATION_TOKEN];
   }
 }
 

@@ -1,4 +1,5 @@
 import webserver from "infra/webserver";
+import features from "infra/constants/features";
 import activation from "models/activation";
 import user from "models/user";
 import orchestrator from "tests/orchestrator.js";
@@ -40,7 +41,7 @@ describe("Use case: Registration flow (all successful)", () => {
       username: "RegistrationFlow",
       email: "registration.flow@curso.dev",
       password: createUserResponseBody.password,
-      features: ["read:activation_token"],
+      features: [features.READ_ACTIVATION_TOKEN],
       created_at: createUserResponseBody.created_at,
       updated_at: createUserResponseBody.updated_at,
     });
@@ -82,7 +83,10 @@ describe("Use case: Registration flow (all successful)", () => {
     expect(Date.parse(activationResponseBody.used_at)).not.toBeNaN();
 
     const activatedUser = await user.findOneByUsername("RegistrationFlow");
-    expect(activatedUser.features).toEqual(["create:session", "read:session"]);
+    expect(activatedUser.features).toEqual([
+      features.CREATE_SESSION,
+      features.READ_SESSION,
+    ]);
   });
 
   test("Login", async () => {

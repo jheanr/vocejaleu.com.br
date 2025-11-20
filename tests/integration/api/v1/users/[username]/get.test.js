@@ -1,5 +1,6 @@
 import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
+import features from "infra/constants/features";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -26,7 +27,7 @@ describe("GET /api/v1/users/[username]", () => {
         username: "MesmoCase",
         email: createdUser.email,
         password: responseBody.password,
-        features: ["read:activation_token"],
+        features: [features.READ_ACTIVATION_TOKEN],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -52,7 +53,7 @@ describe("GET /api/v1/users/[username]", () => {
         username: "CaseDiferente",
         email: createdUser.email,
         password: responseBody.password,
-        features: ["read:activation_token"],
+        features: [features.READ_ACTIVATION_TOKEN],
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });

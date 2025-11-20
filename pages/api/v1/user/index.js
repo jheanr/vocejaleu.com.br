@@ -1,11 +1,12 @@
 import { createRouter } from "next-connect";
 import controller from "infra/controller.js";
+import features from "infra/constants/features";
 import user from "models/user.js";
 import session from "models/session.js";
 
 const router = createRouter();
 router.use(controller.injectAnonymousOrUser);
-router.get(controller.canRequest("read:session"), getHandler);
+router.get(controller.canRequest(features.READ_SESSION), getHandler);
 
 export default router.handler(controller.errorHandlers);
 

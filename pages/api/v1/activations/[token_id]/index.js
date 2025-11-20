@@ -1,9 +1,14 @@
 import { createRouter } from "next-connect";
 import controller from "infra/controller.js";
+import features from "infra/constants/features.js";
 import activation from "models/activation.js";
 
 const router = createRouter();
-router.patch(patchHandler);
+router.use(controller.injectAnonymousOrUser);
+router.patch(
+  controller.canRequest(features.READ_ACTIVATION_TOKEN),
+  patchHandler,
+);
 
 export default router.handler(controller.errorHandlers);
 
