@@ -1,13 +1,23 @@
 import database from "infra/database.js";
 import email from "infra/email.js";
-import { NotFoundError } from "infra/errors.js";
+import { ForbiddenError, NotFoundError } from "infra/errors.js";
 import webserver from "infra/webserver.js";
 import features from "infra/constants/features";
 import user from "models/user.js";
+import authorization from "./authorization.js";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
 
 async function activateUserByUserId(userId) {
+  const userToActivate = await user.findOneById(userId);
+
+  if (!authorization.can(userToActivate, features.READ_ACTIVATION_TOKEN)) {
+    throw new ForbiddenError({
+      message: "Você não pode mais utilizar tokens de ativação.",
+      action: "Entre em contato com o suporte.",
+    });
+  }
+
   const activatedUser = await user.setFeatures(userId, [
     features.CREATE_SESSION,
     features.READ_SESSION,
@@ -114,6 +124,7 @@ const activation = {
   findOneValidById,
   markTokenAsUsed,
   sendEmailToUser,
+  EXPIRATION_IN_MILLISECONDS,
 };
 
 export default activation;
